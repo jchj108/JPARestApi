@@ -1,6 +1,7 @@
-package com.triple.mileage.repository;
+package com.triple.api.mileage.repository;
 
-import com.triple.mileage.entity.User;
+import com.triple.api.mileage.entity.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import java.util.UUID;
 
 @Repository
+@RequiredArgsConstructor
 public class UserRepository {
 
     @PersistenceContext
@@ -20,7 +22,7 @@ public class UserRepository {
         return user.getId();
     }
 
-    public User find(UUID id) {
+    public User findById(UUID id) {
         return em.find(User.class, id);
     }
 }
