@@ -1,38 +1,50 @@
-package com.triple.mileage.repository;
+package com.triple.mileage.api.service;
 
 import com.triple.mileage.api.entity.User;
 import com.triple.mileage.api.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.UUID;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class UserRepositoryTest {
+public class UserServiceTest {
 
-    @Autowired
-    UserRepository userRepository;
+    @Autowired UserService userService;
+    @Autowired UserRepository userRepository;
+    @Autowired EntityManager em;
 
     @Test
-    @Rollback(value = false)
-    public void userSaveTest() throws Exception {
+    public void joinTest() throws Exception {
         //given
         User user = new User();
         user.setId(UUID.randomUUID());
 
         //when
-        UUID saveId = userRepository.save(user);
-        User findUser = userRepository.findOne(saveId);
+        UUID savedId = userService.join(user);
 
         //then
-        Assertions.assertThat(findUser.getId()).isEqualTo(user.getId());
+        em.flush();
+        assertEquals(user, userRepository.findOne(savedId));
     }
+
+    @Test
+    public void validateDuplicateExceptionTest() throws Exception {
+        //given
+
+        //when
+
+        //then
+
+    }
+
 }

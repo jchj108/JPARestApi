@@ -1,5 +1,6 @@
-package com.triple.api.mileage.entity;
+package com.triple.mileage.api.entity;
 
+import com.triple.mileage.api.domain.MileageType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +23,8 @@ public class MileageHistory {
 
     private Long point;
 
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private MileageType type;
 
     private LocalDateTime createdDate;
 }

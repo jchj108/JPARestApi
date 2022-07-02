@@ -1,9 +1,7 @@
-package com.triple.api.mileage.entity;
+package com.triple.mileage.api.entity;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.apache.ibatis.annotations.One;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;

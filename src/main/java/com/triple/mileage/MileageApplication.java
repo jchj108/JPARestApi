@@ -1,4 +1,4 @@
-package com.triple.api.mileage;
+package com.triple.mileage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

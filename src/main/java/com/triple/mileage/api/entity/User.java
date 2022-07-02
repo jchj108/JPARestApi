@@ -1,8 +1,6 @@
-package com.triple.api.mileage.entity;
+package com.triple.mileage.api.entity;
 
-import jdk.jfr.Name;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 

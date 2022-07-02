@@ -1,14 +1,9 @@
-package com.triple.api.mileage.controller;
+package com.triple.mileage.api.controller;
 
-import com.triple.api.mileage.entity.Review;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.UUID;
 
