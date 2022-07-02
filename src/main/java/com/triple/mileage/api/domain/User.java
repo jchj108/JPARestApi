@@ -1,7 +1,6 @@
-package com.triple.mileage.api.entity;
+package com.triple.mileage.api.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -12,8 +11,7 @@ import java.util.UUID;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 public class User {
 
     @Id
@@ -26,5 +24,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<MileageHistory> mileageHistories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviewList = new ArrayList<>();
 
 }

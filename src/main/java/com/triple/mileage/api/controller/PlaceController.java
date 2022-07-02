@@ -1,8 +1,11 @@
 package com.triple.mileage.api.controller;
 
 import com.triple.mileage.api.common.ErrorResponse;
+import com.triple.mileage.api.domain.Place;
 import com.triple.mileage.api.domain.User;
+import com.triple.mileage.api.repository.PlaceRepository;
 import com.triple.mileage.api.repository.UserRepository;
+import com.triple.mileage.api.service.PlaceService;
 import com.triple.mileage.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +19,10 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class PlaceController {
 
-    private final UserRepository userRepository;
-    private final UserService userService;
+    private final PlaceRepository placeRepository;
+    private final PlaceService placeService;
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException exception) {
@@ -33,14 +36,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
-    @GetMapping(path = "users/{userId}")
-    public User one(@PathVariable("userId") UUID userId) {
-        return userService.findOne(userId);
+    @GetMapping(path = "places/{placeId}")
+    public Place one(@PathVariable("placeId") UUID id) {
+        return placeService.findOne(id);
     }
 
-    @PostMapping(path = "users")
+    @PostMapping(path = "places")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public User saveMember(@RequestBody @Valid User user) {
-        return userService.saveUser(user);
+    public Place saveMember(@RequestBody @Valid Place place) {
+        return placeService.savePlace(place);
     }
 }

@@ -1,4 +1,4 @@
-package com.triple.mileage.api.entity;
+package com.triple.mileage.api.domain;
 
 import lombok.Getter;
 import lombok.Setter;

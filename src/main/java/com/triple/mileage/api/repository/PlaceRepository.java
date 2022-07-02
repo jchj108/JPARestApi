@@ -1,5 +1,6 @@
 package com.triple.mileage.api.repository;
 
+import com.triple.mileage.api.domain.Place;
 import com.triple.mileage.api.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -10,20 +11,20 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class UserRepository {
+public class PlaceRepository {
 
     private final EntityManager em;
 
-    public UUID save(User user) {
-        em.persist(user);
-        return user.getId();
+    public UUID save(Place place) {
+        em.persist(place);
+        return place.getId();
     }
-    public User findOne(UUID id) {
-        return em.find(User.class, id);
+    public Place findOne(UUID id) {
+        return em.find(Place.class, id);
     }
 
-    public List<User> findAll() {
-        return em.createQuery("select A from User A", User.class)
+    public List<Place> findAll() {
+        return em.createQuery("select A from Place A", Place.class)
                 .getResultList();
     }
 }

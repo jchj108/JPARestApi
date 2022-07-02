@@ -1,6 +1,6 @@
 package com.triple.mileage.api.service;
 
-import com.triple.mileage.api.entity.User;
+import com.triple.mileage.api.domain.User;
 import com.triple.mileage.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,15 +19,14 @@ public class UserService {
     private final UserRepository userRepository;
 
     // 회원 가입
-    public UUID join(User user) {
+    public User saveUser(User user) {
         validateDuplicateUser(user);
         userRepository.save(user);
-        return user.getId();
+        return user;
     }
 
     private void validateDuplicateUser(User user) {
-        // Exception
-        User findUser = findOne(user.getId());
+        User findUser = userRepository.findOne(user.getId());
         if (findUser != null) {
             throw new IllegalStateException("이미 존재하는 유저입니다.");
         }
@@ -39,7 +38,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User findOne(UUID userId) {
-        return userRepository.findOne(userId);
+    public User findOne(UUID id) {
+        User findUser = userRepository.findOne(id);
+        if (findUser == null) {
+            throw new IllegalArgumentException("유저가 존재하지 않습니다");
+        }
+        return findUser;
     }
+
+
 }

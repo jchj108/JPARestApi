@@ -1,5 +1,6 @@
-package com.triple.mileage.api.entity;
+package com.triple.mileage.api.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -22,4 +23,5 @@ public class Place {
 
     @OneToOne(mappedBy = "place", fetch = LAZY)
     private Review review;
+
 }

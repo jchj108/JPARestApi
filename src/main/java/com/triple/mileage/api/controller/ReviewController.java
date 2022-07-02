@@ -1,15 +1,26 @@
 package com.triple.mileage.api.controller;
 
+import com.triple.mileage.api.domain.Review;
+import com.triple.mileage.api.dto.ReviewDto;
+import com.triple.mileage.api.service.ReviewService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 public class ReviewController {
+
+    private final ReviewService reviewService;
 
 //    "type": "REVIEW",
 //            "action": "ADD", /* "MOD", "DELETE" */
@@ -20,20 +31,18 @@ public class ReviewController {
 //            "userId": "3ede0ef2-92b7-4817-a5f3-0c575361f745",
 //            "placeId": "2e4baf1c-5acb-4efb-a1af-eddada31b00f"
 
-    @Data
-    static class CreateReviewRequest {
-        private String action;
-        private UUID reviewId;
-        private String content;
-        private ArrayList<UUID> attachedPhotoIds;
-        private UUID userId;
-        private UUID placeId;
-    }
 
-//    @PostMapping("/review")
-//    public ResponseEntity saveMember(@RequestBody @Valid CreateReviewRequest request) {
-//
-//        Review review = new Review(); // placeId, reviewId, 자동 생성
-//
-//    }
+
+    @PostMapping("/review")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Review saveReview(@RequestBody @Valid ReviewDto.ReviewRequest dto) {
+        Review review = new Review();
+
+        switch (dto.getAction()) {
+            case "ADD" :
+                review = reviewService.saveReview(dto);
+                break;
+        }
+        return review;
+    }
 }

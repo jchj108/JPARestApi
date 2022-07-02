@@ -1,6 +1,6 @@
 package com.triple.mileage.api.domain;
 
-public enum MileageType {
+public enum ReviewType {
 
-    ALL, ONE;
+    REVIEW
 }
