@@ -4,7 +4,10 @@ import com.triple.mileage.api.dto.ReviewDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.Where;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,14 +17,17 @@ import java.util.UUID;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
+@Where(clause = "is_deleted != 1")
 public class Review {
     @Id
     @Column(name = "reviewId")
     @Type(type = "uuid-char")
     private UUID id;
     private String content;
+
+    @ColumnDefault("0")
+    private Integer isDeleted = 0;
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "placeId")
@@ -37,6 +43,13 @@ public class Review {
     public void addReviewPhoto(ReviewPhoto reviewPhoto) {
         this.attachedPhotoList.add(reviewPhoto);
         reviewPhoto.setReview(this);
+    }
+
+    public void updateReviewPhoto(List<ReviewPhoto> reviewPhotoList) {
+        for (ReviewPhoto reviewPhoto : reviewPhotoList) {
+            this.attachedPhotoList.add(reviewPhoto);
+            reviewPhoto.setReview(this);
+        }
     }
 
     public void setPlace(Place place) {
@@ -57,7 +70,9 @@ public class Review {
         review.setContent(dto.getContent());
 
         for (ReviewPhoto reviewPhoto : reviewPhotos) {
-            review.addReviewPhoto(reviewPhoto);
+            if (reviewPhoto.getId() != null) {
+                review.addReviewPhoto(reviewPhoto);
+            }
         }
         return review;
     }
@@ -70,11 +85,22 @@ public class Review {
         }
     }
 
-    public void updatePlaceReviewCount(Place place) {
+    public void updatePlaceReviewCount(Place place, int val) {
         try {
-            this.place.setReviewCount(place.getReviewCount() + 1);
+            this.place.setReviewCount(place.getReviewCount() + val);
         } catch (NullPointerException exception) {
             this.place.setReviewCount(1);
         }
+    }
+
+    public Review updateReview(Review review, List<ReviewPhoto> reviewPhotoList, ReviewDto.ReviewRequest dto, Long point) {
+        updatePoint(point);
+        review.setAttachedPhotoList(reviewPhotoList);
+        review.setContent(dto.getContent());
+
+        for (ReviewPhoto reviewPhoto : reviewPhotoList) {
+            reviewPhoto.setReview(review);
+        }
+        return review;
     }
 }

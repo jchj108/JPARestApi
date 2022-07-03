@@ -19,6 +19,7 @@ public class PlaceRepository {
         em.persist(place);
         return place.getId();
     }
+
     public Place findOne(UUID id) {
         return em.find(Place.class, id);
     }

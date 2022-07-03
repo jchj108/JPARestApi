@@ -28,4 +28,10 @@ public class MileageHistoryRepository {
         return em.createQuery("select A from MileageHistory A", MileageHistory.class)
                 .getResultList();
     }
+
+    public MileageHistory findByReviewId(UUID id) {
+        return em.createQuery("select A from MileageHistory A where A.review.id = :reviewId", MileageHistory.class)
+                .setParameter("reviewId", id)
+                .getSingleResult();
+    }
 }

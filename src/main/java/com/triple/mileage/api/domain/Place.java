@@ -3,6 +3,8 @@ package com.triple.mileage.api.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -22,6 +24,7 @@ public class Place {
     private long reviewCount;
 
     @OneToOne(mappedBy = "place", fetch = LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
     private Review review;
 
 }

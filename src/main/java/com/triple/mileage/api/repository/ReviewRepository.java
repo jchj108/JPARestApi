@@ -4,10 +4,11 @@ package com.triple.mileage.api.repository;
 import com.triple.mileage.api.domain.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,5 +39,10 @@ public class ReviewRepository {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    public int deleteReview(Review review) {
+        Query query = em.createNativeQuery("delete from Review where review_id = " + "'" + review.getId() + "'");
+        return query.executeUpdate();
     }
 }

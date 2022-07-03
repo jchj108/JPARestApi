@@ -29,9 +29,11 @@ public class ReviewPhoto {
 
         ArrayList<ReviewPhoto> list = new ArrayList<ReviewPhoto>();
         for (UUID id : attachedPhotoIds) {
-            ReviewPhoto reviewPhoto = new ReviewPhoto();
-            reviewPhoto.setId(id);
-            list.add(reviewPhoto);
+            if (id != null) {
+                ReviewPhoto reviewPhoto = new ReviewPhoto();
+                reviewPhoto.setId(id);
+                list.add(reviewPhoto);
+            }
         }
         return list;
     }
