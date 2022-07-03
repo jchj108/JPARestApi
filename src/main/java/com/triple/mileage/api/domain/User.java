@@ -1,6 +1,7 @@
 package com.triple.mileage.api.domain;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -19,13 +20,13 @@ public class User {
     @Type(type = "uuid-char")
     private UUID id;
 
-    @OneToOne(mappedBy = "user", fetch = LAZY)
-    private Mileage mileage;
+    @ColumnDefault("0")
+    private Long point;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = LAZY)
     private List<MileageHistory> mileageHistories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = LAZY)
     private List<Review> reviewList = new ArrayList<>();
 
 }

@@ -61,4 +61,20 @@ public class Review {
         }
         return review;
     }
+
+    public void updatePoint(Long point) {
+        try {
+            this.user.setPoint(this.user.getPoint() + point);
+        } catch (NullPointerException exception) {
+            this.user.setPoint(point);
+        }
+    }
+
+    public void updatePlaceReviewCount(Place place) {
+        try {
+            this.place.setReviewCount(place.getReviewCount() + 1);
+        } catch (NullPointerException exception) {
+            this.place.setReviewCount(1);
+        }
+    }
 }

@@ -43,7 +43,7 @@ public class PlaceController {
 
     @PostMapping(path = "places")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Place saveMember(@RequestBody @Valid Place place) {
+    public Place savePlace(@RequestBody @Valid Place place) {
         return placeService.savePlace(place);
     }
 }

@@ -1,12 +1,12 @@
 package com.triple.mileage.api.service;
 
 import com.triple.mileage.api.controller.ReviewController;
-import com.triple.mileage.api.domain.Place;
-import com.triple.mileage.api.domain.Review;
-import com.triple.mileage.api.domain.ReviewPhoto;
-import com.triple.mileage.api.domain.User;
+import com.triple.mileage.api.domain.*;
 import com.triple.mileage.api.dto.ReviewDto;
+import com.triple.mileage.api.repository.MileageHistoryRepository;
+import com.triple.mileage.api.repository.PlaceRepository;
 import com.triple.mileage.api.repository.ReviewRepository;
+import com.triple.mileage.api.repository.UserRepository;
 import com.triple.mileage.exception.OneUserCanWriteOnlyOnePlaceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +27,11 @@ public class ReviewService {
     private final UserService userService;
     private final PlaceService placeService;
     private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
+    private final MileageHistoryRepository mileageHistoryRepository;
+    private final PlaceRepository placeRepository;
+
+
 
     public Review saveReview(ReviewDto.ReviewRequest dto) {
         User user = userService.findOne(dto.getUserId());
@@ -35,8 +40,24 @@ public class ReviewService {
 
         List<ReviewPhoto> reviewPhoto = ReviewPhoto.createReviewPhoto(dto.getAttachedPhotoIds());
 
-        Review review = Review.createReview(user, place, reviewPhoto, dto);
+        long point = 0;
 
+        if (dto.getContent() != null && dto.getContent().length() >= 1) {
+            point++;
+        }
+        if (reviewPhoto.size() > 0) {
+            point++;
+        }
+        if (placeService.findOne(place.getId()).getReviewCount() == 0) {
+            point++;
+        }
+
+        Review review = Review.createReview(user, place, reviewPhoto, dto);
+        review.updatePoint(point);
+        review.updatePlaceReviewCount(place);
+
+        MileageHistory mileageHistory = MileageHistory.createMileageHistory(user, MileageType.WRITE_REVIEW);
+        mileageHistoryRepository.save(mileageHistory);
         reviewRepository.save(review);
 
         return review;

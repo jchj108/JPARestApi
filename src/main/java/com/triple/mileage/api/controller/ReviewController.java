@@ -5,16 +5,13 @@ import com.triple.mileage.api.domain.Review;
 import com.triple.mileage.api.dto.ReviewDto;
 import com.triple.mileage.api.service.ReviewService;
 import com.triple.mileage.exception.OneUserCanWriteOnlyOnePlaceException;
-import com.triple.mileage.exception.ReviewRequestInvalidException;
-import lombok.Data;
+import com.triple.mileage.exception.InvalidReviewRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,14 +24,14 @@ public class ReviewController {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
-    @ExceptionHandler(ReviewRequestInvalidException.class)
-    public ResponseEntity<ErrorResponse> handleReviewRequestInvalidException(ReviewRequestInvalidException exception) {
+    @ExceptionHandler(InvalidReviewRequestException.class)
+    public ResponseEntity<ErrorResponse> handleReviewRequestInvalidException(InvalidReviewRequestException exception) {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @PostMapping("/review")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public ReviewDto.Res saveReview(@RequestBody @Valid ReviewDto.ReviewRequest dto) {
         Review review = new Review();
 
@@ -46,7 +43,7 @@ public class ReviewController {
                 break;
             case "DELETE" :
                 break;
-            default: throw new ReviewRequestInvalidException("유효하지 않은 액션입니다");
+            default: throw new InvalidReviewRequestException("유효하지 않은 액션입니다");
         }
         return new ReviewDto.Res(review);
     }

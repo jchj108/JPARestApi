@@ -2,5 +2,8 @@ package com.triple.mileage.api.domain;
 
 public enum MileageType {
 
-    ALL, ONE;
+    WRITE_REVIEW,
+    DELETE_REVIEW,
+    ADD_PHOTO,
+    DELETE_PHOTO,
 }
