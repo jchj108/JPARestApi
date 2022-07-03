@@ -1,6 +1,7 @@
 package com.triple.mileage.api.service;
 
 import com.triple.mileage.api.domain.Place;
+import com.triple.mileage.api.domain.User;
 import com.triple.mileage.api.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,6 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
 
-    // 회원 가입
     public Place savePlace(Place place) {
         validateDuplicatePlace(place);
         placeRepository.save(place);
@@ -38,6 +38,10 @@ public class PlaceService {
 
     @Transactional(readOnly = true)
     public Place findOne(UUID id) {
-        return placeRepository.findOne(id);
+        Place findPlace = placeRepository.findOne(id);
+        if (findPlace == null) {
+            throw new IllegalArgumentException("장소가 존재하지 않습니다");
+        }
+        return findPlace;
     }
 }

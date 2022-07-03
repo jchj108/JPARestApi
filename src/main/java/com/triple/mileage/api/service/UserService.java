@@ -18,7 +18,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    // 회원 가입
     public User saveUser(User user) {
         validateDuplicateUser(user);
         userRepository.save(user);
@@ -45,6 +44,4 @@ public class UserService {
         }
         return findUser;
     }
-
-
 }

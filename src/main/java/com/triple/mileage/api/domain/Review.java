@@ -1,5 +1,6 @@
 package com.triple.mileage.api.domain;
 
+import com.triple.mileage.api.dto.ReviewDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +31,7 @@ public class Review {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<ReviewPhoto> attachedPhotoList = new ArrayList<>();
 
     public void addReviewPhoto(ReviewPhoto reviewPhoto) {
@@ -48,13 +49,15 @@ public class Review {
         user.getReviewList().add(this);
     }
 
-    public static Review createReview(User user, Place place, List<ReviewPhoto> reviewPhotos) {
-
+    public static Review createReview(User user, Place place, List<ReviewPhoto> reviewPhotos, ReviewDto.ReviewRequest dto) {
         Review review = new Review();
+        review.setId(dto.getReviewId());
         review.setUser(user);
         review.setPlace(place);
+        review.setContent(dto.getContent());
+
         for (ReviewPhoto reviewPhoto : reviewPhotos) {
-            review.attachedPhotoList.add(reviewPhoto);
+            review.addReviewPhoto(reviewPhoto);
         }
         return review;
     }
