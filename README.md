@@ -5,9 +5,9 @@
 
 ## ERD
 
-![image](https://user-images.githubusercontent.com/75921378/177165397-27815617-567d-461c-aade-5d1627f145c5.png)
+![image](https://user-images.githubusercontent.com/75921378/177166391-87b7df06-bd35-421f-80a4-ca626efad72b.png)
 
-## prerequisite 
+## Prerequisite 
 
 - (java 8, Gradle)
 
