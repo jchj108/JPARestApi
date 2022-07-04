@@ -3,6 +3,9 @@
 
 마일리지 서비스 구현
 
+## ERD
+
+![image](https://user-images.githubusercontent.com/75921378/177165397-27815617-567d-461c-aade-5d1627f145c5.png)
 
 ## prerequisite 
 
