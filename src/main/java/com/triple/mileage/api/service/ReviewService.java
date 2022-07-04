@@ -1,17 +1,14 @@
 package com.triple.mileage.api.service;
 
-import com.triple.mileage.api.controller.ReviewController;
 import com.triple.mileage.api.domain.*;
 import com.triple.mileage.api.dto.ReviewDto;
 import com.triple.mileage.api.repository.*;
-import com.triple.mileage.exception.OneUserCanWriteOnlyOnePlaceException;
+import com.triple.mileage.api.exception.OneUserCanWriteOnlyOnePlaceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NoResultException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,15 +43,15 @@ public class ReviewService {
         if (reviewPhoto.size() > 0) {
             point++;
         }
-        if (placeService.findOne(place.getId()).getReviewCount() == 0) {
+        if (place.getReviewCount() == 0) {
             point++;
         }
 
         Review review = Review.createReview(user, place, reviewPhoto, dto);
-        review.updatePoint(point);
+        user.setPoint(user.getPoint()+point);
         review.updatePlaceReviewCount(place, 1);
 
-        MileageHistory mileageHistory = MileageHistory.createMileageHistory(user, point, MileageType.WRITE_REVIEW, review);
+        MileageHistory mileageHistory = MileageHistory.createMileageHistory(user, MileageType.WRITE_REVIEW, review, point);
         mileageHistoryRepository.save(mileageHistory);
         reviewRepository.save(review);
 
@@ -82,13 +79,15 @@ public class ReviewService {
             mileageType = MileageType.DELETE_PHOTO;
         }
         if (point != 0) {
-           mileageHistoryRepository.save(MileageHistory.createMileageHistory(user, user.getPoint() + point, mileageType, review));
+            // 포인트 증감이 없을 때만 이력 생성
+            user.setPoint(user.getPoint() + point);
+            mileageHistoryRepository.save(MileageHistory.createMileageHistory(user, mileageType, review, point));
         }
 
         reviewPhotoRepository.deleteByReviewId(review);
         List<ReviewPhoto> reviewPhotoList = ReviewPhoto.createReviewPhoto(dto.getAttachedPhotoIds());
 
-        return review.updateReview(review, reviewPhotoList, dto, point);
+        return review.updateReview(review, reviewPhotoList, dto);
     }
 
     public Review deleteReview(ReviewDto.ReviewRequest dto) {
@@ -97,11 +96,11 @@ public class ReviewService {
         User user = userRepository.findOne(dto.getUserId());
         Place place = placeRepository.findOne(dto.getPlaceId());
 
-        Long prevPoint = mileageHistoryRepository.findByReviewId(review.getId()).getPoint();
-        review.updatePoint(prevPoint * -1);
+        Long earnedPoint = mileageHistoryRepository.findEarendPoint(user, review);
         review.updatePlaceReviewCount(place, -1);
+        user.setPoint(user.getPoint() - earnedPoint);
 
-        MileageHistory mileageHistory = MileageHistory.createMileageHistory(user, prevPoint * -1, MileageType.DELETE_REVIEW, review);
+        MileageHistory mileageHistory = MileageHistory.createMileageHistory(user, MileageType.DELETE_REVIEW, review, earnedPoint * -1);
         mileageHistoryRepository.save(mileageHistory);
 
         review.setIsDeleted(1);

@@ -13,6 +13,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
@@ -21,7 +22,7 @@ public class User {
     private UUID id;
 
     @ColumnDefault("0")
-    private Long point;
+    private long point;
 
     @OneToMany(mappedBy = "user", fetch = LAZY)
     private List<MileageHistory> mileageHistories = new ArrayList<>();
@@ -29,4 +30,11 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = LAZY)
     private List<Review> reviewList = new ArrayList<>();
 
+    @Builder
+    public User(UUID id, long point, List<MileageHistory> mileageHistories, List<Review> reviewList) {
+        this.id = id;
+        this.point = point;
+        this.mileageHistories = mileageHistories;
+        this.reviewList = reviewList;
+    }
 }

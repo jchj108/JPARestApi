@@ -1,12 +1,9 @@
 package com.triple.mileage.api.controller;
 
 import com.triple.mileage.api.common.ErrorResponse;
-import com.triple.mileage.api.domain.Place;
-import com.triple.mileage.api.domain.User;
+import com.triple.mileage.api.dto.PlaceDto;
 import com.triple.mileage.api.repository.PlaceRepository;
-import com.triple.mileage.api.repository.UserRepository;
 import com.triple.mileage.api.service.PlaceService;
-import com.triple.mileage.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,13 +34,14 @@ public class PlaceController {
     }
 
     @GetMapping(path = "places/{placeId}")
-    public Place one(@PathVariable("placeId") UUID id) {
-        return placeService.findOne(id);
+    public ResponseEntity one(@PathVariable("placeId") UUID id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new PlaceDto.Res(placeService.findOne(id)));
     }
 
     @PostMapping(path = "places")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public Place savePlace(@RequestBody @Valid Place place) {
-        return placeService.savePlace(place);
+    public ResponseEntity savePlace(@RequestBody @Valid PlaceDto.PlaceRequest dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new PlaceDto.Res(placeService.savePlace(dto)));
     }
 }

@@ -1,13 +1,13 @@
 package com.triple.mileage.api.domain;
 
 import com.triple.mileage.api.dto.ReviewDto;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.Where;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter @Setter
 @Where(clause = "is_deleted != 1")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review {
     @Id
     @Column(name = "reviewId")
@@ -52,11 +53,6 @@ public class Review {
         }
     }
 
-    public void setPlace(Place place) {
-        this.place = place;
-        place.setReview(this);
-    }
-
     public void setUser(User user) {
         this.user = user;
         user.getReviewList().add(this);
@@ -77,15 +73,8 @@ public class Review {
         return review;
     }
 
-    public void updatePoint(Long point) {
-        try {
-            this.user.setPoint(this.user.getPoint() + point);
-        } catch (NullPointerException exception) {
-            this.user.setPoint(point);
-        }
-    }
 
-    public void updatePlaceReviewCount(Place place, int val) {
+    public void updatePlaceReviewCount(Place place, long val) {
         try {
             this.place.setReviewCount(place.getReviewCount() + val);
         } catch (NullPointerException exception) {
@@ -93,8 +82,7 @@ public class Review {
         }
     }
 
-    public Review updateReview(Review review, List<ReviewPhoto> reviewPhotoList, ReviewDto.ReviewRequest dto, Long point) {
-        updatePoint(point);
+    public Review updateReview(Review review, List<ReviewPhoto> reviewPhotoList, ReviewDto.ReviewRequest dto) {
         review.setAttachedPhotoList(reviewPhotoList);
         review.setContent(dto.getContent());
 

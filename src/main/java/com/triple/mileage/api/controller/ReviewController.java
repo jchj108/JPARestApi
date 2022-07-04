@@ -4,15 +4,17 @@ import com.triple.mileage.api.common.ErrorResponse;
 import com.triple.mileage.api.domain.Review;
 import com.triple.mileage.api.dto.ReviewDto;
 import com.triple.mileage.api.service.ReviewService;
-import com.triple.mileage.exception.OneUserCanWriteOnlyOnePlaceException;
-import com.triple.mileage.exception.InvalidReviewRequestException;
+import com.triple.mileage.api.exception.OneUserCanWriteOnlyOnePlaceException;
+import com.triple.mileage.api.exception.InvalidReviewRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ReviewController {
@@ -37,21 +39,22 @@ public class ReviewController {
 
     @PostMapping("/review")
     @ResponseStatus(HttpStatus.OK)
-    public ReviewDto.Res saveReview(@RequestBody @Valid ReviewDto.ReviewRequest dto) {
+    public ResponseEntity saveReview(@RequestBody @Valid ReviewDto.ReviewRequest dto) {
         Review review = null;
 
         switch (dto.getAction()) {
-            case "ADD" :
+            case ADD :
                 review = reviewService.saveReview(dto);
                 break;
-            case "MOD" :
+            case MOD :
                 review = reviewService.modReview(dto);
                 break;
-            case "DELETE" :
+            case DELETE :
                 review = reviewService.deleteReview(dto);
                 break;
             default: throw new InvalidReviewRequestException("유효하지 않은 액션입니다");
         }
-        return new ReviewDto.Res(review);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ReviewDto.Res(review));
     }
 }
