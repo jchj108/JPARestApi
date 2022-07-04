@@ -51,7 +51,6 @@ public class MileageHistoryRepository {
     }
 
     public List<MileageHistory> findHistoriesByUser(UUID userId) {
-
         return em.createQuery("select A from MileageHistory A where A.user.id = :userId order by A.createdDate desc")
                 .setParameter("userId", userId)
                 .getResultList();
