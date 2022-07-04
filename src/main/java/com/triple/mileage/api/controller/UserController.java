@@ -1,8 +1,7 @@
 package com.triple.mileage.api.controller;
 
 import com.triple.mileage.api.common.ErrorResponse;
-import com.triple.mileage.api.domain.User;
-import com.triple.mileage.api.repository.UserRepository;
+import com.triple.mileage.api.dto.UserDto;
 import com.triple.mileage.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
     private final UserService userService;
 
     @ExceptionHandler(IllegalStateException.class)
@@ -34,13 +32,14 @@ public class UserController {
     }
 
     @GetMapping(path = "users/{userId}")
-    public User one(@PathVariable("userId") UUID userId) {
-        return userService.findOne(userId);
+    public ResponseEntity findOne(@PathVariable ("userId") UUID userId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new UserDto.Res(userService.findOne(userId)));
     }
 
     @PostMapping(path = "users")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public User saveMember(@RequestBody @Valid User user) {
-        return userService.saveUser(user);
+    public ResponseEntity saveMember(@RequestBody @Valid UserDto.UserRequest dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new UserDto.Res(userService.saveUser(dto)));
     }
 }

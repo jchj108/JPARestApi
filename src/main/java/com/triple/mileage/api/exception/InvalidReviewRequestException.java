@@ -1,4 +1,4 @@
-package com.triple.mileage.exception;
+package com.triple.mileage.api.exception;
 
 public class InvalidReviewRequestException extends RuntimeException {
 

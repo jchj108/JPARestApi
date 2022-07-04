@@ -24,7 +24,9 @@ public class MileageHistory {
     @JoinColumn(name="userId")
     private User user;
 
-    private Long point;
+    private Long pointHistory;
+
+    private long point = 0;
 
     @Enumerated(EnumType.STRING)
     private MileageType type;
@@ -35,14 +37,14 @@ public class MileageHistory {
     private Review review;
 
     private LocalDateTime createdDate;
-
-    public static MileageHistory createMileageHistory(User user, Long point, MileageType type, Review review) {
+    public static MileageHistory createMileageHistory(User user, MileageType type, Review review, long point) {
         MileageHistory mileageHistory = new MileageHistory();
         mileageHistory.setUser(user);
         mileageHistory.setReview(review);
-        mileageHistory.setPoint(point);
+        mileageHistory.setPointHistory(user.getPoint());
         mileageHistory.setCreatedDate(LocalDateTime.now());
         mileageHistory.setType(type);
+        mileageHistory.setPoint(point);
 
         return mileageHistory;
     }

@@ -1,8 +1,6 @@
 package com.triple.mileage.api.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
@@ -14,6 +12,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Place {
 
     @Id
@@ -27,4 +26,10 @@ public class Place {
     @NotFound(action = NotFoundAction.IGNORE)
     private Review review;
 
+    @Builder
+    public Place(UUID id, long reviewCount, Review review) {
+        this.id = id;
+        this.reviewCount = reviewCount;
+        this.review = review;
+    }
 }

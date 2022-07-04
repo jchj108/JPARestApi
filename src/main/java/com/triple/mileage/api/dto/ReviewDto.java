@@ -1,6 +1,7 @@
 package com.triple.mileage.api.dto;
 
 import com.triple.mileage.api.domain.Review;
+import com.triple.mileage.api.domain.ReviewAction;
 import com.triple.mileage.api.domain.ReviewPhoto;
 import lombok.Data;
 import lombok.Getter;
@@ -13,7 +14,7 @@ public class ReviewDto {
 
     @Data
     public static class ReviewRequest {
-        private String action;
+        private ReviewAction action;
         private UUID reviewId;
         private String content;
         private List<UUID> attachedPhotoIds;

@@ -1,6 +1,7 @@
 package com.triple.mileage.api.service;
 
 import com.triple.mileage.api.domain.User;
+import com.triple.mileage.api.dto.UserDto;
 import com.triple.mileage.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +19,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User saveUser(User user) {
-        validateDuplicateUser(user);
-        userRepository.save(user);
-        return user;
+    public User saveUser(UserDto.UserRequest dto) {
+        validateDuplicateUser(dto.toEntity());
+        userRepository.save(dto.toEntity());
+        return dto.toEntity();
     }
 
     private void validateDuplicateUser(User user) {
