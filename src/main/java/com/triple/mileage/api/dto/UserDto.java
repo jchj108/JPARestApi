@@ -22,9 +22,11 @@ public class UserDto {
     @Getter
     public static class Res {
         private UUID userId;
+        private Long point;
 
         public Res(User user) {
             this.userId = user.getId();
+            this.point = user.getPoint();
         }
     }
 }

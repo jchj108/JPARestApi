@@ -1,7 +1,6 @@
 package com.triple.mileage.api.dto;
 
 import com.triple.mileage.api.domain.Place;
-import com.triple.mileage.api.domain.User;
 import lombok.Data;
 import lombok.Getter;
 
@@ -23,9 +22,11 @@ public class PlaceDto {
     @Getter
     public static class Res {
         private UUID placeId;
+        private long reviewCount;
 
         public Res(Place place) {
             this.placeId = place.getId();
+            this.reviewCount = place.getReviewCount();
         }
     }
 
