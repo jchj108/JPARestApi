@@ -5,7 +5,7 @@
 
 ## ERD
 
-![image](https://user-images.githubusercontent.com/75921378/177166391-87b7df06-bd35-421f-80a4-ca626efad72b.png)
+![image](https://user-images.githubusercontent.com/75921378/177168946-f9b9b6d1-b0ff-435c-a91c-ccafec56554c.png)
 
 ## Prerequisite 
 
@@ -23,4 +23,4 @@
 
 - User와 Place가 존재하지 않는다면 Review를 등록할 수 없습니다.
 - ddl-auto 옵션을 통해 어플리케이션 실행 시 스키마가 자동으로 생성됩니다.
-- 테이블 스키마는 resources.sql 에서 확인이 가능합니다.
+- 테이블 스키마는 resources/sql 경로에서 에서 확인이 가능합니다.
